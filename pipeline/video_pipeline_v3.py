@@ -196,6 +196,38 @@ def generate_ambient_bgm(duration, output=None, mood="neutral"):
 
 
 # ============================================================
+# 音效生成（FFmpeg 合成短促效果音）
+# ============================================================
+
+def generate_sfx(sfx_type, output=None):
+    """用 FFmpeg 合成短音效。sfx_type: ding | whoosh | boom | tick"""
+    if output is None:
+        output = str(TMP_DIR / f"sfx_{sfx_type}.mp3")
+
+    if os.path.exists(output):
+        return output
+
+    sfx_config = {
+        "ding":   "aevalsrc='0.6*sin(2*PI*1200*t)*exp(-8*t)':s=44100:d=0.6",
+        "whoosh": "aevalsrc='0.4*sin(2*PI*(400+800*t)*t)*exp(-3*t)':s=44100:d=0.8",
+        "boom":   "aevalsrc='0.8*sin(2*PI*80*t)*exp(-2*t)':s=44100:d=1.0",
+        "tick":   "aevalsrc='0.5*sin(2*PI*800*t)*exp(-15*t)':s=44100:d=0.3",
+    }
+
+    expr = sfx_config.get(sfx_type, sfx_config["ding"])
+
+    cmd = [
+        FFMPEG, "-y", "-f", "lavfi", "-i", expr,
+        "-c:a", "libmp3lame", "-q:a", "2", output
+    ]
+    try:
+        subprocess.run(cmd, capture_output=True, timeout=10)
+        return output if os.path.exists(output) else None
+    except Exception:
+        return None
+
+
+# ============================================================
 # 主流程
 # ============================================================
 
@@ -277,25 +309,59 @@ async def build_video(script_path):
     for i, scene in enumerate(scenes):
         sid = scene["id"]
         ad = audio_data[i]
+        direction = scene.get("zoom", ZOOM_DIRECTIONS[i % len(ZOOM_DIRECTIONS)])
+
+        # 多图：同一场景 A/B 交替切换
+        imgs = scene.get("images", [])
         img_path = _resolve_image(scene.get("image_path", ""))
-        if not img_path:
-            imgs = scene.get("images", [])
-            if imgs:
-                img_path = _resolve_image(imgs[0])
+        if not img_path and imgs:
+            img_path = _resolve_image(imgs[0])
 
         if not img_path or not os.path.exists(img_path):
             print(f"  S{sid}: 跳过(无图)")
             continue
 
-        direction = scene.get("zoom", ZOOM_DIRECTIONS[i % len(ZOOM_DIRECTIONS)])
-        clip = make_image_clip(img_path, ad["duration"], direction)
+        # 多图交替：2+ 张图轮播
+        if len(imgs) >= 2:
+            sub_dur = ad["duration"] / len(imgs)
+            sub_clips = []
+            for j, imp in enumerate(imgs):
+                resolved = _resolve_image(imp)
+                if resolved and os.path.exists(resolved):
+                    sc = make_image_clip(resolved, sub_dur, direction)
+                    sub_clips.append(sc)
+            if sub_clips:
+                clip = concatenate_videoclips(sub_clips, method="compose", padding=-0.3)
+                clip = clip.with_duration(ad["duration"])
+            else:
+                clip = make_image_clip(img_path, ad["duration"], direction)
+        else:
+            clip = make_image_clip(img_path, ad["duration"], direction)
+
+        # 配音
         audio = AudioFileClip(ad["path"])
         if audio.duration > ad["duration"]:
             audio = audio.subclipped(0, ad["duration"])
         audio = audio.with_effects([AudioFadeIn(0.15), AudioFadeOut(0.5)])
+
+        # 音效（可选）
+        sfx_type = scene.get("sfx", "")
+        if sfx_type:
+            sfx_path = generate_sfx(sfx_type)
+            if sfx_path:
+                sfx = AudioFileClip(sfx_path)
+                sfx = sfx.with_effects([MultiplyVolume(0.3)])
+                audio = CompositeAudioClip([audio, sfx])
+                print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction} | sfx={sfx_type}{' | '+str(len(imgs))+'图交替' if len(imgs)>=2 else ''}")
+            else:
+                print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}{' | '+str(len(imgs))+'图交替' if len(imgs)>=2 else ''}")
+        elif len(imgs) >= 2:
+            print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction} | {len(imgs)}图交替")
+        else:
+            print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}")
+
         clip = clip.with_audio(audio)
         clips.append(clip)
-        print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}")
 
     # 结尾：最后一张图 fade out（含互动话术 CTA）
     outro_text = script.get("outro_narration", "")

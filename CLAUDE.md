@@ -81,6 +81,8 @@ pip install -r requirements.txt
 | `bgm_volume` | BGM 音量，0=静音 1=原声，建议 0.10~0.20 |
 | `outro_narration` | 结尾互动话术，引导评论/关注（如 "你觉得呢？评论区告诉我"） |
 | `pace`（每场景） | 节奏：`slow`（慢/悬念）/ `normal`（正常）/ `fast`（快/兴奋）。影响语速 |
+| `images`（每场景） | 多图数组 `["a.png","b.png"]`，同场景 A/B 交替切换，打破单调 |
+| `sfx`（每场景） | 音效：`ding`(提示) / `whoosh`(过渡) / `boom`(震撼) / `tick`(强调) |
 
 ## 运镜方向
 
