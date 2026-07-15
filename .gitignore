@@ -1,0 +1,18 @@
+# 视频输出（体积大，每次运行都会重新生成）
+output/
+
+# Python
+__pycache__/
+*.pyc
+
+# 临时文件
+*TEMP_MPY*
+*.tmp
+
+# 系统
+desktop.ini
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
