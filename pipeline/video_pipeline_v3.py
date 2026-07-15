@@ -436,9 +436,6 @@ async def build_video(script_path):
         clip = clip.with_audio(audio)
         clips.append(clip)
 
-        clip = clip.with_audio(audio)
-        clips.append(clip)
-
     # 结尾：最后一张图 fade out（含互动话术 CTA）
     outro_text = script.get("outro_narration", "")
     last_img = _resolve_image(scenes[-1].get("image_path", ""))

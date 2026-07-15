@@ -1,0 +1,82 @@
+{
+  "title": "太阳的声音",
+  "voice": "zh-CN-YunxiNeural",
+  "output": "深空画布_太阳的声音_v1.mp4",
+  "hook": "太阳每时每刻都在唱歌",
+  "bgm": "auto",
+  "bgm_mood": "mystery",
+  "bgm_volume": 0.12,
+  "color": "warm",
+  "outro_narration": "下一个想看什么声音变成画面？鲸歌？黑洞的咆哮？还是你家猫的呼噜声？评论区告诉我",
+  "scenes": [
+    {
+      "id": 1,
+      "narration": "太阳每时每刻都在唱歌。不是比喻——太阳表面的等离子体在持续振动，产生特定的声波频率。科学家把这门学科叫做日震学。",
+      "rate": "-3%",
+      "pitch": "+0Hz",
+      "pace": "slow",
+      "zoom": "in",
+      "sfx": "ding",
+      "image_path": "assets/ai/sunsound_01.png"
+    },
+    {
+      "id": 2,
+      "narration": "他们把太阳的振动频率转换成人类耳朵能听见的声波之后，太阳就有了声音。不是轰隆隆的爆炸声，而是一种低沉、持续的嗡鸣。像宇宙深处一颗巨大心脏在跳动。",
+      "rate": "-5%",
+      "pitch": "-2Hz",
+      "pace": "slow",
+      "zoom": "in",
+      "image_path": "assets/ai/sunsound_02.png"
+    },
+    {
+      "id": 3,
+      "narration": "我把五分钟太阳振动的频率数据变成了画面。色调代表频率高低——低频偏红，高频偏蓝紫。亮度代表振幅大小，振动越剧烈的地方越亮。纹理就是波形的样子。这就是太阳的一首歌。",
+      "rate": "+3%",
+      "pitch": "+3Hz",
+      "pace": "normal",
+      "zoom": "right",
+      "sfx": "tick",
+      "image_path": "assets/ai/sunsound_03.png"
+    },
+    {
+      "id": 4,
+      "narration": "接下来你看到的，是一次太阳耀斑爆发时的频率风暴。耀斑释放的能量相当于数十亿颗核弹同时爆炸。在频率图上看——就是一场海啸。",
+      "rate": "+8%",
+      "pitch": "+5Hz",
+      "pace": "fast",
+      "zoom": "in",
+      "sfx": "boom",
+      "image_path": "assets/ai/sunsound_04.png"
+    },
+    {
+      "id": 5,
+      "narration": "左边是安静期的太阳，右边是耀斑爆发时的太阳。同一颗恒星，两种完全不同的声音。安静时像摇篮曲，爆发时像金属乐队在太阳表面开演唱会。",
+      "rate": "+5%",
+      "pitch": "+4Hz",
+      "pace": "normal",
+      "zoom": "out",
+      "sfx": "whoosh",
+      "layout": "compare",
+      "image_path": "assets/ai/sunsound_05.png",
+      "image_compare": "assets/ai/sunsound_06.png"
+    },
+    {
+      "id": 6,
+      "narration": "每一次振动、每一个频率、每一道光——都是太阳在说话。它在告诉我们它内部的温度、密度、磁场结构。科学家就是通过听这些声音，看穿了这个距离我们一亿五千万公里的巨大火球。",
+      "rate": "-3%",
+      "pitch": "+2Hz",
+      "pace": "slow",
+      "zoom": "up",
+      "image_path": "assets/ai/sunsound_07.png"
+    },
+    {
+      "id": 7,
+      "narration": "人类花了四百年造望远镜去看太阳。但只花了四十年就学会了听太阳。有时候，换个感官去看宇宙，你会发现完全不同的世界。下一次你晒太阳的时候不妨想一想——这颗恒星正在你头顶，为整个太阳系唱着一首只有我们能翻译的歌。",
+      "rate": "-5%",
+      "pitch": "-2Hz",
+      "pace": "slow",
+      "zoom": "out",
+      "image_path": "assets/ai/sunsound_08.png"
+    }
+  ]
+}

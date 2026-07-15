@@ -41,9 +41,10 @@ AI 科普短视频自动生产线。输入 AI 图片 + JSON 脚本 → 输出小
 |------|:--:|------|------|
 | 马里亚纳海沟 出图+出片 | ✅ 完成 | WorkBuddy | 8张图+60MB视频已完成 |
 | 管线 P0~P3 四级升级 | ✅ 完成 | Claude Code | v3.0→v3.3 |
-| **用 v3.3 重跑巨齿鲨+创生之柱** | 🟡 **待 WorkBuddy 领** | — | 管线升级后需重出片 |
-| 用 v3.3 生成封面（4个选题） | 🟡 待领 | — | `python tools/cover_maker.py scripts/xxx.json` |
-| 太阳的声音 写脚本+出图 | ⬜ 待领 | — | 内容计划已有文案 |
+| 修复 v3.3 重复 clip bug | ✅ 完成 | Claude Code | 每个场景被加了两次，已修复 |
+| **太阳的声音 写脚本+出图** | 🟡 进行中 | Claude Code | 内容计划已有文案，写脚本+生成素材 |
+| **用 v3.3 重跑巨齿鲨+创生之柱** | 🟡 进行中 | WorkBuddy | 管线升级后需重出片（含 BGM/CTA/音效） |
+| **用 v3.3 生成封面（4个选题）** | 🟡 进行中 | WorkBuddy | `python tools/cover_maker.py scripts/xxx.json` |
 | LLM 自动写 JSON 脚本（v4） | ⬜ 待领 | — | |
 
 ## 🤝 协作公约
@@ -88,14 +89,39 @@ AI 科普短视频自动生产线。输入 AI 图片 + JSON 脚本 → 输出小
 - 生成 mari_01~08.png 深海图片
 - 出片 output/深空画布_马里亚纳海沟_v1.mp4
 
+### 第五轮（并行协作试验）— Claude Code ↔ WorkBuddy 同步干活
+
+**Claude Code 做：**
+- 修复 v3.3 重复 clip bug（每个场景被加了两次）
+- 写 `scripts/太阳的声音_v1.json`
+- 生成声音可视化图片（abstract 模式）
+
+**WorkBuddy 做：**
+- 用 v3.3 重跑巨齿鲨 + 创生之柱（让老选题用上 BGM/音效/CTA）
+- 用 `cover_maker.py` 生成 4 个选题的封面
+- 完成后更新看板，commit 格式：`[任务名] 做了什么`
+
 ---
 
-### ⚠️ 给 WorkBuddy 的下一条消息
+### ⚠️ 给 WorkBuddy 的下一条消息（2026-07-15 第五轮）
 
-> 管线已升级到 v3.3。巨齿鲨的脚本 `scripts/巨齿鲨_v3.json` 已经加了所有新字段作为演示（hook/BGM/CTA/pace/sfx）。
+> 🔥 **并行协作模式启动！** 我和 Claude Code 同时在干活。
 > 
-> 请做：
+> **背景：** 管线已升级到 v3.3（BGM/音效/色彩/分屏/CTA）。巨齿鲨和创生之柱的 JSON 脚本已更新了新字段。
+> 
+> **你需要做的事（按优先级）：**
 > 1. `git pull` 拉最新代码
-> 2. 用 v3.3 重跑巨齿鲨和创生之柱（让老选题用上新功能）
-> 3. 用 `python tools/cover_maker.py scripts/xxx.json` 生成 4 个选题的封面
-> 4. 完成后更新本看板
+> 2. 用 v3.3 重跑巨齿鲨：`python pipeline/video_pipeline_v3.py scripts/巨齿鲨_v3.json`
+> 3. 用 v3.3 重跑创生之柱：`python pipeline/video_pipeline_v3.py scripts/创生之柱_v3.json`
+> 4. 生成 4 个选题封面：
+>    ```
+>    python tools/cover_maker.py scripts/创生之柱_v3.json
+>    python tools/cover_maker.py scripts/巨齿鲨_v3.json
+>    python tools/cover_maker.py scripts/山海经_v3.json
+>    python tools/cover_maker.py scripts/马里亚纳海沟_v1.json
+>    ```
+> 5. 完成后更新本看板（状态改为 ✅ 完成），commit + push
+> 
+> **Claude Code 同时在做的：** 太阳的声音脚本+素材，完了也会 push。
+> 
+> **注意：** 我们同时在 master 上改不同文件，不会冲突。但你那边如果方便，开分支更好。
