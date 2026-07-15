@@ -1,0 +1,90 @@
+{
+  "title": "地球上最深的地方",
+  "voice": "zh-CN-YunxiNeural",
+  "output": "深空画布_马里亚纳海沟_v2.mp4",
+  "hook": "比登月还难到达的地方",
+  "bgm": "auto",
+  "bgm_mood": "deep",
+  "bgm_volume": 0.12,
+  "color": "cool",
+  "outro_narration": "地球上还有95%的海洋未被探索。你觉得深海里还藏着什么？评论区说说你的猜想",
+  "scenes": [
+    {
+      "id": 1,
+      "narration": "如果从海平面开始，一直往下沉。10米，阳光灿烂。200米，开始变暗。1000米，彻底漆黑。4000米，水温接近冰点。11034米——你到了。地球上最深的地方。",
+      "rate": "-5%",
+      "pitch": "+0Hz",
+      "pace": "slow",
+      "image_path": "assets/ai/mari_new_01.png",
+      "zoom": "down",
+      "sfx": "whoosh"
+    },
+    {
+      "id": 2,
+      "narration": "马里亚纳海沟。深度11034米。说个最直观的——把整座珠穆朗玛峰倒过来插进去，山顶离海面还差两千多米。你站在地面上感受到的压力，在这里要乘以一千。普通潜艇到这里不是进水，是被直接压扁。",
+      "rate": "+0%",
+      "pitch": "+3Hz",
+      "pace": "normal",
+      "image_path": "assets/ai/mari_new_02.png",
+      "zoom": "right",
+      "sfx": "boom"
+    },
+    {
+      "id": 3,
+      "narration": "有一个事实让人沉默：到目前为止，有十二个人登上过月球。但只有三个人到过马里亚纳海沟底部。到过地球最深处的人，比在月球上走过的人还少。我们把人类送上了38万公里外的月球，却还没搞清楚自家门口的海底长什么样。",
+      "rate": "+3%",
+      "pitch": "+5Hz",
+      "pace": "normal",
+      "image_path": "assets/ai/mari_new_01.png",
+      "zoom": "out",
+      "sfx": "tick"
+    },
+    {
+      "id": 4,
+      "narration": "海面到海沟底部的旅程，不是一蹴而就的。阳光在海面下200米就消亡了。1000米以下，叫午夜带——永恒的黑夜。4000米，叫深渊带——水温常年保持在1到2摄氏度。而11000米的超深渊带，这里的压力超过每平方厘米一吨。",
+      "rate": "+3%",
+      "pitch": "+2Hz",
+      "pace": "fast",
+      "image_path": "assets/ai/mari_new_01.png",
+      "zoom": "in"
+    },
+    {
+      "id": 5,
+      "narration": "如果你站在海沟底部往上看。阳光永远照不到这里。周围是绝对的黑暗，只有偶尔闪过的生物荧光——那是深海生物自己发出的光。温度接近冰点，压力大到足以把钢铁压成铁皮。这是地球上最不像地球的地方。",
+      "rate": "-3%",
+      "pitch": "-5Hz",
+      "pace": "slow",
+      "image_path": "assets/ai/mari_new_02.png",
+      "zoom": "up"
+    },
+    {
+      "id": 6,
+      "narration": "但你猜怎么着——这里依然有生命。2014年，科学家在8143米深的地方拍到了深海狮子鱼。半透明的身体，没有鱼鳞，骨骼几乎是软的。它在压力大到足以杀死大部分生物的地方，活得好好的。生命的韧性，超出我们最狂野的想象。",
+      "rate": "+0%",
+      "pitch": "+8Hz",
+      "pace": "normal",
+      "image_path": "assets/ai/mari_new_03.png",
+      "zoom": "in",
+      "sfx": "ding"
+    },
+    {
+      "id": 7,
+      "narration": "地球表面的71%被海洋覆盖。而这71%当中，有95%的区域人类从未探索过。我们对火星表面的了解，超过了对自家海底的了解。火星距离我们平均两亿两千五百万公里——我们却把探测车送上去了。而海底，就在我们脚下不到12公里。",
+      "rate": "+3%",
+      "pitch": "+5Hz",
+      "pace": "normal",
+      "image_path": "assets/ai/mari_new_04.png",
+      "zoom": "left"
+    },
+    {
+      "id": 8,
+      "narration": "深海之下，还有深海。马里亚纳海沟不是终点。在它的底部附近，有被称为黑烟囱的海底热泉——岩浆加热的海水从地壳裂缝喷涌而出，温度超过370摄氏度。周围生活着完全不需要阳光的生态系统。地球上的生命，也许就是从这样的地方开始的。",
+      "rate": "-8%",
+      "pitch": "-2Hz",
+      "pace": "slow",
+      "image_path": "assets/ai/mari_new_04.png",
+      "zoom": "out",
+      "sfx": "boom"
+    }
+  ]
+}
