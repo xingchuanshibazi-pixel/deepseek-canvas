@@ -2,6 +2,10 @@
   "title": "地球上存在过的最大的掠食者",
   "voice": "zh-CN-YunxiNeural",
   "output": "深空画布_巨齿鲨_v3_fixed.mp4",
+  "hook": "比公交车还长的鲨鱼\n真的存在过",
+  "bgm": "auto",
+  "bgm_mood": "deep",
+  "bgm_volume": 0.15,
   "scenes": [
     {
       "id": 1,

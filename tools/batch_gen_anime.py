@@ -25,14 +25,14 @@ if not WALLPAPER_LAB.exists():
 # 👇 修改这里：格式为 (文件名前缀, 英文提示词)
 # ============================================================
 PROMPTS = [
-    ("cmeg_01", "megalodon giant ancient shark emerging from deep ocean abyss, epic scale, tiny human diver for size comparison, Japanese anime style, masterpiece, detailed, dramatic lighting, underwater scene"),
-    ("cmeg_02", "megalodon size comparison with great white shark and human, three silhouettes side by side, accurate proportions, Japanese anime style, educational illustration, clean composition"),
-    ("cmeg_03", "giant fossil shark tooth, 17cm, displayed in museum case, human hand next to it for scale, Japanese anime style, detailed, beautiful lighting"),
-    ("cmeg_04", "megalodon open jaws, rows of sharp teeth, powerful bite force visualised, Japanese anime style, dramatic angle, dynamic composition, action scene"),
-    ("cmeg_05", "megalodon hunting whale underwater, attacking from below, prehistoric ocean, Japanese anime style, epic battle scene, dynamic action"),
-    ("cmeg_06", "lonely megalodon swimming in cold dark ocean, melancholic atmosphere, last of its kind, Japanese anime style, beautiful sad illustration, blue tones"),
-    ("cmeg_07", "dark deep ocean abyss, mysterious giant shadow barely visible, myth vs reality, Japanese anime style, atmospheric, mysterious composition"),
-    ("cmeg_08", "megalodon fossil teeth scattered on ancient ocean floor, sun rays from surface, beautiful memorial, Japanese anime style, poetic, nostalgic, masterpiece"),
+    ("mari_01", "deep ocean descent from sunlit surface to absolute darkness, vertical depth gradient with sunlight fading into midnight zone, Japanese anime style, masterpiece, detailed, dramatic blue lighting, educational illustration"),
+    ("mari_02", "Mariana Trench cross-section with Mount Everest upside down submerged and still short of surface, immense scale comparison, dark abyss, Japanese anime style, detailed, epic composition, blue-black depths"),
+    ("mari_03", "solitary explorer at the deepest point of Earth contrasting with moon landing, tiny lonely figure in vast dark ocean trench, sense of isolation, Japanese anime style, atmospheric, mysterious"),
+    ("mari_04", "ocean depth layers from sunlight zone to midnight zone to abyss to hadal zone, gradient shifting from bright blue to pitch black, Japanese anime style, clean educational illustration"),
+    ("mari_05", "looking up from the trench bottom into absolute darkness, bioluminescent deep sea creatures glowing faintly, tiny points of light scattered in black water, Japanese anime style, beautiful, mysterious, ethereal"),
+    ("mari_06", "deep sea snailfish at 8000m depth, translucent body, no scales, soft skeleton, glowing faintly under crushing pressure, Japanese anime style, detailed creature design, beautiful and melancholic"),
+    ("mari_07", "Earth viewed from space with 71 percent covered by ocean, unexplored deep depths highlighted, contrast with Mars rover, Japanese anime style, cosmic perspective, glowing blue planet"),
+    ("mari_08", "hydrothermal vent black smoker on seafloor, 370C mineral rich water erupting from cracks, bizarre creatures thriving without sunlight, Japanese anime style, dramatic, alien ecosystem, glowing"),
 ]
 
 # ============================================================
@@ -42,7 +42,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 for name, prompt in PROMPTS:
     path = OUT / f"{name}.png"
-    cmd = f'cd "{WALLPAPER_LAB}" && python wallpaper.py sd -p "{prompt}" -s anime -r 1080p --orientation portrait --output "{path}"'
+    cmd = f'cd "{WALLPAPER_LAB}" && "{sys.executable}" wallpaper.py sd -p "{prompt}" -s anime -r 1080p --orientation portrait --output "{path}"'
     print(f"生成 {name}...")
     r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=120)
     if r.returncode == 0:

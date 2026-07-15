@@ -12,7 +12,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 
 from moviepy import (
     ImageClip, AudioFileClip, VideoFileClip, CompositeVideoClip,
-    concatenate_videoclips, vfx
+    concatenate_videoclips, vfx, TextClip, CompositeAudioClip
 )
 from moviepy.video.fx.Resize import Resize
 from moviepy.video.fx.Crop import Crop
@@ -21,6 +21,7 @@ from moviepy.video.fx.FadeOut import FadeOut as VFadeOut
 from moviepy.audio.fx.AudioFadeIn import AudioFadeIn
 from moviepy.audio.fx.AudioFadeOut import AudioFadeOut
 from moviepy.audio.fx.AudioLoop import AudioLoop
+from moviepy.audio.fx.MultiplyVolume import MultiplyVolume
 from PIL import Image
 import edge_tts
 
@@ -44,6 +45,10 @@ FFMPEG = shutil.which("ffmpeg")
 if not FFMPEG:
     print("❌ 找不到 ffmpeg！请安装后加入 PATH，或访问 https://ffmpeg.org/download.html")
     sys.exit(1)
+
+# 开场钩子字体（系统自带黑体，无额外依赖）
+HOOK_FONT = "C:/Windows/Fonts/simhei.ttf"
+BGM_DIR = PROJECT_ROOT / "assets" / "bgm"
 
 
 # ============================================================
@@ -146,8 +151,58 @@ def _resolve_image(img_path):
     return str(PROJECT_ROOT / p)
 
 
+# ============================================================
+# BGM 生成（FFmpeg 合成环境音，无需外部音频文件）
+# ============================================================
+
+def generate_ambient_bgm(duration, output=None, mood="neutral"):
+    """用 FFmpeg 合成简单的环境背景音。
+
+    mood: "neutral" | "deep" | "uplift" | "mystery"
+    返回 BGM 文件路径。
+    """
+    if output is None:
+        output = str(TMP_DIR / f"bgm_ambient_{mood}.mp3")
+
+    if os.path.exists(output):
+        return output
+
+    # 不同情绪对应不同频率和音色
+    mood_config = {
+        "neutral":  ("sine=frequency=220:duration={d},sine=frequency=330:duration={d}", 0.3),
+        "deep":     ("sine=frequency=110:duration={d},sine=frequency=165:duration={d}", 0.35),
+        "uplift":   ("sine=frequency=261:duration={d},sine=frequency=392:duration={d}", 0.25),
+        "mystery":  ("sine=frequency=196:duration={d},sine=frequency=294:duration={d}", 0.28),
+    }
+
+    sine_def, target_vol = mood_config.get(mood, mood_config["neutral"])
+    sine_def = sine_def.format(d=duration)
+
+    # 生成双音叠加 + 淡入淡出
+    cmd = [
+        FFMPEG, "-y",
+        "-f", "lavfi", "-i",
+        f"aevalsrc='0.3*sin(2*PI*220*t)+0.2*sin(2*PI*330*t)':s=44100:d={duration}",
+        "-af", f"afade=t=in:d=2,afade=t=out:st={duration-3}:d=3,volume={target_vol}",
+        "-c:a", "libmp3lame", "-q:a", "4",
+        output
+    ]
+
+    try:
+        subprocess.run(cmd, capture_output=True, timeout=30)
+        return output
+    except Exception:
+        return None
+
+
+# ============================================================
+# 主流程
+# ============================================================
+
+ZOOM_DIRECTIONS = ["in", "right", "out", "left", "up", "in", "left", "out"]
+
+
 async def build_video(script_path):
-    # 脚本路径：相对路径基于项目根解析
     script_p = Path(script_path)
     if not script_p.is_absolute():
         script_p = PROJECT_ROOT / script_p
@@ -157,9 +212,16 @@ async def build_video(script_path):
     title = script.get("title", "")
     scenes = script.get("scenes", [])
     voice = script.get("voice", VOICE)
+    hook_text = script.get("hook", "")
+    bgm_path = script.get("bgm", "")
+    bgm_vol = script.get("bgm_volume", 0.15)
 
     print(f"==== {title} ====")
-    print(f"场景: {len(scenes)} | 风格: 二次元 | 文字: 无 | 运镜: FFmpeg zoompan")
+    print(f"场景: {len(scenes)} | 风格: 二次元 | 运镜: FFmpeg zoompan")
+    if hook_text:
+        print(f"开场钩子: {hook_text}")
+    if bgm_path:
+        print(f"BGM: {bgm_path}")
 
     # Phase 1: 配音
     print("\n--- 配音 ---")
@@ -177,9 +239,20 @@ async def build_video(script_path):
     print("\n--- 视频片段 ---")
     clips = []
 
-    # 开场：第一张图 fade in
-    first_img = _resolve_image(scenes[0].get("image_path", scenes[0].get("images", [None])[0]))
-    if first_img and os.path.exists(first_img):
+    # 开场钩子（前 3 秒 = 大字吸引眼球）
+    first_img = _resolve_image(scenes[0].get("image_path", ""))
+    if hook_text and first_img and os.path.exists(first_img) and os.path.exists(HOOK_FONT):
+        hook_clip = ImageClip(first_img).resized((W, H)).with_duration(3.0)
+        hook_txt = TextClip(
+            text=hook_text, font=HOOK_FONT, font_size=72,
+            color="white", stroke_color="black", stroke_width=4,
+            method="caption", size=(W - 80, None), text_align="center"
+        ).with_position("center").with_duration(3.0)
+        hook_clip = CompositeVideoClip([hook_clip, hook_txt]).with_duration(3.0)
+        hook_clip = hook_clip.with_effects([VFadeIn(0.3), VFadeOut(0.6)])
+        clips.append(hook_clip)
+        print(f"  钩子: 3.0s | \"{hook_text}\"")
+    elif first_img and os.path.exists(first_img):
         intro = ImageClip(first_img).resized((W, H)).with_duration(2.0)
         intro = intro.with_effects([VFadeIn(1.0), VFadeOut(0.5)])
         clips.append(intro)
@@ -221,6 +294,43 @@ async def build_video(script_path):
     print(f"\n--- 合成 ---")
     video = concatenate_videoclips(clips, method="compose", padding=-0.5)
     print(f"  总时长: {video.duration:.0f}s")
+
+    # BGM 背景音乐
+    if bgm_path:
+        bgm_p = Path(bgm_path)
+        if not bgm_p.is_absolute():
+            bgm_p = PROJECT_ROOT / bgm_p
+
+        # 如果没有 BGM 文件，自动生成环境音
+        if not bgm_p.exists():
+            print(f"\n--- 生成 BGM ---")
+            mood = script.get("bgm_mood", "neutral")
+            generated = generate_ambient_bgm(
+                int(video.duration) + 5, str(TMP_DIR / f"bgm_{title}.mp3"), mood
+            )
+            if generated:
+                bgm_p = Path(generated)
+                print(f"  已生成环境音: {mood}")
+            else:
+                print(f"  BGM 生成失败，跳过")
+
+        if bgm_p.exists():
+            print(f"  BGM: {bgm_p.name} (音量 {bgm_vol})")
+            bgm_clip = AudioFileClip(str(bgm_p))
+            if bgm_clip.duration < video.duration:
+                bgm_clip = bgm_clip.with_effects([AudioLoop(duration=video.duration)])
+            else:
+                bgm_clip = bgm_clip.subclipped(0, video.duration)
+            bgm_clip = bgm_clip.with_effects([
+                MultiplyVolume(bgm_vol),
+                AudioFadeIn(2.0),
+                AudioFadeOut(3.0)
+            ])
+
+            # 混合配音 + BGM
+            video_audio = video.audio
+            mixed = CompositeAudioClip([video_audio, bgm_clip])
+            video = video.with_audio(mixed)
 
     out_name = script.get("output", f"{title}.mp4")
     out_path = str(OUTPUT_DIR / out_name)

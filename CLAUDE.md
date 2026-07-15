@@ -54,6 +54,10 @@ pip install -r requirements.txt
   "title": "视频标题",
   "voice": "zh-CN-YunxiNeural",
   "output": "输出文件名.mp4",
+  "hook": "开场钩子大字（可选，显示3秒）",
+  "bgm": "auto 或 assets/bgm/xxx.mp3（可选，auto=自动生成环境音）",
+  "bgm_mood": "neutral|deep|uplift|mystery（bgm=auto时生效）",
+  "bgm_volume": 0.15,
   "scenes": [
     {
       "id": 1,
@@ -66,6 +70,15 @@ pip install -r requirements.txt
   ]
 }
 ```
+
+### 新增字段（v3.1）
+
+| 字段 | 说明 |
+|------|------|
+| `hook` | 开场 3 秒大字钩子，吸引注意力。如 "比公交车还长的鲨鱼\n真的存在过" |
+| `bgm` | 背景音乐路径，或 `"auto"` 自动生成环境音 |
+| `bgm_mood` | BGM 情绪：`neutral`(通用) / `deep`(深海/深沉) / `uplift`(向上/希望) / `mystery`(神秘) |
+| `bgm_volume` | BGM 音量，0=静音 1=原声。建议 0.10~0.20 |
 
 ## 运镜方向
 
