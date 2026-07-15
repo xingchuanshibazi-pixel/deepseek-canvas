@@ -83,6 +83,9 @@ pip install -r requirements.txt
 | `pace`（每场景） | 节奏：`slow`（慢/悬念）/ `normal`（正常）/ `fast`（快/兴奋）。影响语速 |
 | `images`（每场景） | 多图数组 `["a.png","b.png"]`，同场景 A/B 交替切换，打破单调 |
 | `sfx`（每场景） | 音效：`ding`(提示) / `whoosh`(过渡) / `boom`(震撼) / `tick`(强调) |
+| `color`（全局/每场景） | 色彩：`warm`(暖) / `cool`(冷) / `vivid`(鲜艳) / `film`(电影感) |
+| `layout`（每场景） | `"compare"` 分屏对比模式（需 `image_compare` 第二张图） |
+| `image_compare`（每场景） | 分屏对比时的右侧/第二张图片路径 |
 
 ## 运镜方向
 

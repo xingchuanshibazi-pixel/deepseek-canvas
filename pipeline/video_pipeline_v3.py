@@ -55,13 +55,24 @@ BGM_DIR = PROJECT_ROOT / "assets" / "bgm"
 # FFmpeg Zoompan — CPU 平滑 Ken Burns
 # ============================================================
 
-def ffmpeg_zoompan(image_path, duration, direction="in", output=None):
+# 色彩预设（FFmpeg eq 滤镜参数）
+COLOR_PRESETS = {
+    "warm":  "eq=brightness=0.03:saturation=1.2",
+    "cool":  "eq=brightness=-0.02:saturation=0.85",
+    "vivid": "eq=saturation=1.35:contrast=1.1",
+    "film":  "eq=contrast=1.15:saturation=1.1:brightness=-0.02",
+}
+
+
+def ffmpeg_zoompan(image_path, duration, direction="in", color=None, output=None):
     """用 FFmpeg zoompan 生成平滑缩放片段（纯 CPU，不需要 GPU）
 
     direction: "in" | "out" | "left" | "right" | "up" | "down"
+    color: "warm" | "cool" | "vivid" | "film" | None（不调色）
     """
     if output is None:
-        output = str(TMP_DIR / f"zoom_{Path(image_path).stem}_{direction}.mp4")
+        tag = f"{direction}_{color}" if color else direction
+        output = str(TMP_DIR / f"zoom_{Path(image_path).stem}_{tag}.mp4")
 
     if direction == "in":
         expr = "zoom+0.0008"
@@ -88,18 +99,44 @@ def ffmpeg_zoompan(image_path, duration, direction="in", output=None):
 
     total_frames = int(duration * FPS)
 
+    # 基础 zoompan 滤镜
+    vf = f"zoompan=z='{expr}':x='{x_expr}':y='{y_expr}':d={total_frames}:s={W}x{H}:fps={FPS}"
+    # 叠加色彩滤镜
+    if color and color in COLOR_PRESETS:
+        vf += f",{COLOR_PRESETS[color]}"
+
     cmd = [
         FFMPEG, "-y", "-loop", "1", "-i", image_path,
-        "-vf", f"zoompan=z='{expr}':x='{x_expr}':y='{y_expr}':d={total_frames}:s={W}x{H}:fps={FPS}",
+        "-vf", vf,
         "-t", str(duration), "-pix_fmt", "yuv420p", output
     ]
     subprocess.run(cmd, capture_output=True, timeout=60)
     return output
 
 
-def make_image_clip(image_path, duration, zoom_direction="in"):
+def ffmpeg_compare(img_a, img_b, duration, output=None):
+    """分屏对比：两张图并排展示（适合体型对比、数据对比）"""
+    if output is None:
+        output = str(TMP_DIR / f"compare_{Path(img_a).stem}_{Path(img_b).stem}.mp4")
+
+    cmd = [
+        FFMPEG, "-y",
+        "-loop", "1", "-i", img_a,
+        "-loop", "1", "-i", img_b,
+        "-filter_complex",
+        f"[0:v]scale={W//2}:{H},setsar=1[L];"
+        f"[1:v]scale={W//2}:{H},setsar=1[R];"
+        f"[L][R]hstack=inputs=2,"
+        f"zoompan=z='1.02':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={int(duration*FPS)}:s={W}x{H}:fps={FPS}",
+        "-t", str(duration), "-pix_fmt", "yuv420p", output
+    ]
+    subprocess.run(cmd, capture_output=True, timeout=60)
+    return output
+
+
+def make_image_clip(image_path, duration, zoom_direction="in", color=None):
     """创建带 zoompan 效果的图片片段"""
-    video_path = ffmpeg_zoompan(image_path, duration, zoom_direction)
+    video_path = ffmpeg_zoompan(image_path, duration, zoom_direction, color)
     clip = VideoFileClip(video_path)
     clip = clip.with_effects([VFadeIn(0.4), VFadeOut(0.4)])
     return clip.with_duration(duration)
@@ -306,12 +343,14 @@ async def build_video(script_path):
         print(f"  开场: 2.0s")
 
     # 场景片段
+    global_color = script.get("color", "")  # 全局色彩预设
+
     for i, scene in enumerate(scenes):
         sid = scene["id"]
         ad = audio_data[i]
         direction = scene.get("zoom", ZOOM_DIRECTIONS[i % len(ZOOM_DIRECTIONS)])
-
-        # 多图：同一场景 A/B 交替切换
+        color = scene.get("color", global_color) or None  # 场景级优先
+        layout = scene.get("layout", "")
         imgs = scene.get("images", [])
         img_path = _resolve_image(scene.get("image_path", ""))
         if not img_path and imgs:
@@ -321,22 +360,34 @@ async def build_video(script_path):
             print(f"  S{sid}: 跳过(无图)")
             continue
 
+        # 分屏对比模式
+        if layout == "compare":
+            img_b = _resolve_image(scene.get("image_compare", ""))
+            if img_b and os.path.exists(img_b):
+                video_path = ffmpeg_compare(img_path, img_b, ad["duration"])
+                clip = VideoFileClip(video_path)
+                clip = clip.with_effects([VFadeIn(0.4), VFadeOut(0.4)])
+                clip = clip.with_duration(ad["duration"])
+            else:
+                clip = make_image_clip(img_path, ad["duration"], direction, color)
+
         # 多图交替：2+ 张图轮播
-        if len(imgs) >= 2:
+        elif len(imgs) >= 2:
             sub_dur = ad["duration"] / len(imgs)
             sub_clips = []
             for j, imp in enumerate(imgs):
                 resolved = _resolve_image(imp)
                 if resolved and os.path.exists(resolved):
-                    sc = make_image_clip(resolved, sub_dur, direction)
+                    sc = make_image_clip(resolved, sub_dur, direction, color)
                     sub_clips.append(sc)
             if sub_clips:
                 clip = concatenate_videoclips(sub_clips, method="compose", padding=-0.3)
                 clip = clip.with_duration(ad["duration"])
             else:
-                clip = make_image_clip(img_path, ad["duration"], direction)
+                clip = make_image_clip(img_path, ad["duration"], direction, color)
+
         else:
-            clip = make_image_clip(img_path, ad["duration"], direction)
+            clip = make_image_clip(img_path, ad["duration"], direction, color)
 
         # 配音
         audio = AudioFileClip(ad["path"])
@@ -352,13 +403,22 @@ async def build_video(script_path):
                 sfx = AudioFileClip(sfx_path)
                 sfx = sfx.with_effects([MultiplyVolume(0.3)])
                 audio = CompositeAudioClip([audio, sfx])
-                print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction} | sfx={sfx_type}{' | '+str(len(imgs))+'图交替' if len(imgs)>=2 else ''}")
-            else:
-                print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}{' | '+str(len(imgs))+'图交替' if len(imgs)>=2 else ''}")
-        elif len(imgs) >= 2:
-            print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction} | {len(imgs)}图交替")
-        else:
-            print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}")
+
+        # 日志
+        tags = []
+        if layout == "compare":
+            tags.append("分屏对比")
+        if color:
+            tags.append(f"色调={color}")
+        if len(imgs) >= 2:
+            tags.append(f"{len(imgs)}图交替")
+        if sfx_type:
+            tags.append(f"sfx={sfx_type}")
+        tag_str = (" | " + " · ".join(tags)) if tags else ""
+        print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}{tag_str}")
+
+        clip = clip.with_audio(audio)
+        clips.append(clip)
 
         clip = clip.with_audio(audio)
         clips.append(clip)
