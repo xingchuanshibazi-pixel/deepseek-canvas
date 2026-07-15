@@ -75,10 +75,12 @@ pip install -r requirements.txt
 
 | 字段 | 说明 |
 |------|------|
-| `hook` | 开场 3 秒大字钩子，吸引注意力。如 "比公交车还长的鲨鱼\n真的存在过" |
+| `hook` | 开场 3 秒大字钩子，吸引注意力 |
 | `bgm` | 背景音乐路径，或 `"auto"` 自动生成环境音 |
-| `bgm_mood` | BGM 情绪：`neutral`(通用) / `deep`(深海/深沉) / `uplift`(向上/希望) / `mystery`(神秘) |
-| `bgm_volume` | BGM 音量，0=静音 1=原声。建议 0.10~0.20 |
+| `bgm_mood` | BGM 情绪：`neutral` / `deep` / `uplift` / `mystery` |
+| `bgm_volume` | BGM 音量，0=静音 1=原声，建议 0.10~0.20 |
+| `outro_narration` | 结尾互动话术，引导评论/关注（如 "你觉得呢？评论区告诉我"） |
+| `pace`（每场景） | 节奏：`slow`（慢/悬念）/ `normal`（正常）/ `fast`（快/兴奋）。影响语速 |
 
 ## 运镜方向
 

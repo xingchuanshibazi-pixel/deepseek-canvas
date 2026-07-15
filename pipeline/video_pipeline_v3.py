@@ -223,17 +223,32 @@ async def build_video(script_path):
     if bgm_path:
         print(f"BGM: {bgm_path}")
 
-    # Phase 1: 配音
+    # Phase 1: 配音（含节奏控制：pace 字段映射为语速）
     print("\n--- 配音 ---")
+    PACE_RATE_MAP = {"slow": "-8%", "normal": "+0%", "fast": "+8%"}
     audio_data = []
     for scene in scenes:
         sid = scene["id"]
+        # 节奏控制：slow/fast → 语速调整
+        pace = scene.get("pace", "normal")
+        base_rate = scene.get("rate", "+0%")
+        pace_adjust = PACE_RATE_MAP.get(pace, "+0%")
+
+        # 合并 rate 值（简单叠加百分比）
+        def _merge_rate(r1, r2):
+            v1 = int(r1.replace("%", "").replace("+", ""))
+            v2 = int(r2.replace("%", "").replace("+", "")) if r2 else 0
+            v = v1 + v2
+            return f"{'+' if v >= 0 else ''}{v}%"
+
+        effective_rate = _merge_rate(base_rate, pace_adjust)
         audio_path, dur = await generate_scene_audio(
             scene["narration"], sid, voice,
-            scene.get("rate", "+0%"), scene.get("pitch", "+0Hz")
+            effective_rate, scene.get("pitch", "+0Hz")
         )
         audio_data.append({"id": sid, "path": audio_path, "duration": dur})
-        print(f"  S{sid}: {dur:.1f}s")
+        pace_mark = f" [{pace}]" if pace != "normal" else ""
+        print(f"  S{sid}: {dur:.1f}s | rate={effective_rate}{pace_mark}")
 
     # Phase 2: 图片准备 + FFmpeg zoompan 片段
     print("\n--- 视频片段 ---")
@@ -282,13 +297,31 @@ async def build_video(script_path):
         clips.append(clip)
         print(f"  S{sid}: {ad['duration']:.1f}s | zoom={direction}")
 
-    # 结尾：最后一张图 fade out
+    # 结尾：最后一张图 fade out（含互动话术 CTA）
+    outro_text = script.get("outro_narration", "")
     last_img = _resolve_image(scenes[-1].get("image_path", ""))
     if last_img and os.path.exists(last_img):
-        outro = ImageClip(last_img).resized((W, H)).with_duration(3.0)
+        outro_duration = 3.0
+        outro_audio = None
+
+        # 如果有结尾话术，生成配音
+        if outro_text:
+            cta_path, cta_dur = await generate_scene_audio(
+                outro_text, 99, voice, "-3%", "-2Hz"
+            )
+            outro_duration = max(3.0, cta_dur + 1.5)
+            outro_audio = AudioFileClip(cta_path)
+            if outro_audio.duration > outro_duration:
+                outro_audio = outro_audio.subclipped(0, outro_duration)
+            outro_audio = outro_audio.with_effects([AudioFadeIn(0.3), AudioFadeOut(1.2)])
+            print(f"  结尾CTA: \"{outro_text[:40]}...\" ({cta_dur:.1f}s)")
+
+        outro = ImageClip(last_img).resized((W, H)).with_duration(outro_duration)
         outro = outro.with_effects([VFadeIn(0.5), VFadeOut(1.5)])
+        if outro_audio:
+            outro = outro.with_audio(outro_audio)
         clips.append(outro)
-        print(f"  结尾: 3.0s")
+        print(f"  结尾画面: {outro_duration:.1f}s")
 
     # 拼接
     print(f"\n--- 合成 ---")
