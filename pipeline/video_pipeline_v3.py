@@ -42,6 +42,22 @@ TMP_DIR = Path(tempfile.gettempdir()) / "deepspace_temp"
 TMP_DIR.mkdir(parents=True, exist_ok=True)
 
 FFMPEG = shutil.which("ffmpeg")
+# 自动检测 imageio_ffmpeg 自带的 ffmpeg（Python 包内置，无需额外安装）
+if not FFMPEG:
+    try:
+        import imageio_ffmpeg
+        FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        pass
+if not FFMPEG:
+    # 最后尝试常见路径
+    for guess in [
+        "ffmpeg-win-x86_64-v7.1.exe",  # imageio_ffmpeg 默认文件名
+    ]:
+        g = shutil.which(guess)
+        if g:
+            FFMPEG = g
+            break
 if not FFMPEG:
     print("❌ 找不到 ffmpeg！请安装后加入 PATH，或访问 https://ffmpeg.org/download.html")
     sys.exit(1)
