@@ -1,0 +1,26 @@
+以下命令逐行复制到 PowerShell 运行，不要手打：
+
+====================================================
+
+cd F:\claude\deepseek-canvas
+
+====================================================
+
+git remote -v
+
+（如果没看到 gitee 地址，跑下面这行；如果看到了，跳过 ↓）
+
+git remote add origin https://gitee.com/shibazichuan/deepseek-canvas.git
+
+====================================================
+
+git push -u origin master
+
+（提示 Username：输入你的 Gitee 用户名）
+（提示 Password：输入你的 Gitee 密码，输入时不显示字符是正常的）
+
+====================================================
+
+推成功后会显示类似：
+ * [new branch]      master -> master
+ branch 'master' set up to track 'origin/master'.

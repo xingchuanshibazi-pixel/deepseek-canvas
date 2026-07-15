@@ -1,0 +1,37 @@
+# 深空画布项目 · 接手指南
+
+> 这份文件直接发给他。他复制下面那段给 WorkBuddy 就行。
+
+---
+
+## 发给他用的话（复制这段发给他）
+
+把下面这段话复制给你的 WorkBuddy：
+
+```
+打开这个项目：https://gitee.com/shibazichuan/deepseek-canvas
+
+先 git clone 下来，然后读 CLAUDE.md 和 .workbuddy/memory/MEMORY.md 理解项目。
+
+然后做这几件事：
+1. 检查环境：FFmpeg 装了没、Python 依赖齐了没
+2. 用 scripts/巨齿鲨_v3.json 跑一次，验证能出片
+3. 看 MEMORY.md 里的待办，挑一件开始做
+
+如果环境有问题，先帮我修好环境再干活。
+```
+
+---
+
+## 或者你也可以直接给他看这个
+
+```
+git clone https://gitee.com/shibazichuan/deepseek-canvas.git
+cd deepseek-canvas
+pip install -r requirements.txt
+winget install ffmpeg
+```
+
+然后让他用 WorkBuddy 打开 `F:\claude\deepseek-canvas`，说：
+
+> 读 CLAUDE.md，然后告诉我这个项目是什么、哪些能做、哪些要修。挑一件开始。

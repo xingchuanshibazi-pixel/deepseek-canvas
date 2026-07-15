@@ -123,3 +123,31 @@ pip install -r requirements.txt
 - 不要直接运行 v2 和 create_video.py（含硬编码路径，仅作学习参考）
 - 不要改 `assets/ai/` 里被脚本引用的图片文件名（改了 JSON 也得同步改）
 - 不要在 JSON 里用中文文件名（FFmpeg 可能不兼容）
+
+## 协作规范
+
+本项目可能由多个 AI 助手协作（Claude Code、WorkBuddy 等），通过 Gitee Git 仓库同步工作。
+协作详情见 `.workbuddy/memory/MEMORY.md`（任务看板 + 公约）。
+
+### 提交信息格式
+
+```
+[任务名] 做了什么
+
+示例：
+[马里亚纳海沟] 新增 8 张深海图片
+[修复] batch_gen_anime.py 前缀错位
+[文档] MEMORY.md 更新任务状态
+```
+
+### 工作流程
+
+```
+git pull → 读 MEMORY.md 看板 → 领任务 → 开分支 → 干活 → commit → push → 更新看板状态
+```
+
+### Git 工作分支
+
+- `master` — 稳定版本，不直接改
+- `feature/<任务名>` — 各任务独立分支
+- 完成任务后在 MEMORY.md 看板更新状态，由人类审核合并
