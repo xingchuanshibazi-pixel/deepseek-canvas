@@ -1,0 +1,80 @@
+{
+  "title": "秦始皇陵",
+  "voice": "zh-CN-YunyangNeural",
+  "output": "深空画布_秦始皇陵_v1.mp4",
+  "hook": "地下埋着一支八千人的军队",
+  "bgm": "auto",
+  "bgm_mood": "mystery",
+  "bgm_volume": 0.14,
+  "color": "film",
+  "outro_narration": "如果有一天秦始皇陵地宫被打开了，你觉得里面会有什么？评论区说说你的猜想",
+  "scenes": [
+    {
+      "id": 1,
+      "narration": "1974年3月，陕西临潼。几个农民在打井的时候，锄头碰到了坚硬的东西。他们以为是一块普通的陶片。没人能想到，这一锄头挖出了二十世纪最伟大的考古发现。",
+      "rate": "-3%",
+      "pitch": "+0Hz",
+      "pace": "slow",
+      "zoom": "in",
+      "sfx": "ding",
+      "image_path": "assets/ai/qsh_01.png"
+    },
+    {
+      "id": 2,
+      "narration": "地下埋着的，是八千多个真人大小的陶俑士兵。每一个都不一样——不同的脸型，不同的胡须，不同的发髻，甚至不同的鞋底纹路。两千两百年前，秦朝的工匠不是在做兵马俑，他们是在给每一个人塑像。",
+      "rate": "+3%",
+      "pitch": "+2Hz",
+      "pace": "normal",
+      "zoom": "right",
+      "image_path": "assets/ai/qsh_02.png"
+    },
+    {
+      "id": 3,
+      "narration": "这支地下军团排成战斗阵型。前锋是三排弩兵，两翼和后卫是战车和骑兵，中间是步兵主力。秦始皇把他征服六国的那支军队，原样复制到了地下。他相信在另一个世界，自己还要继续打仗。",
+      "rate": "+5%",
+      "pitch": "+3Hz",
+      "pace": "normal",
+      "zoom": "in",
+      "sfx": "tick",
+      "image_path": "assets/ai/qsh_03.png"
+    },
+    {
+      "id": 4,
+      "narration": "但兵马俑只是秦始皇陵的冰山一角。整个陵园的面积是五十六平方公里，相当于七十八个故宫。司马迁在史记里记载，地宫里有水银做的江河湖海，有宝石镶嵌的星空，还有机关弩箭防止盗墓贼。",
+      "rate": "+3%",
+      "pitch": "+0Hz",
+      "pace": "slow",
+      "zoom": "out",
+      "sfx": "whoosh",
+      "image_path": "assets/ai/qsh_04.png"
+    },
+    {
+      "id": 5,
+      "narration": "两千多年过去了，秦始皇的地宫至今没有被打开。1980年代考古队在封土堆上钻探取样，真的检测到了超高浓度的汞——司马迁说的水银河流，极有可能是真的。",
+      "rate": "+5%",
+      "pitch": "+4Hz",
+      "pace": "normal",
+      "sfx": "boom",
+      "zoom": "in",
+      "image_path": "assets/ai/qsh_05.png"
+    },
+    {
+      "id": 6,
+      "narration": "建造这个陵墓用了三十八年，动用了七十万劳工。但秦始皇本人只在位了十一年就死了。他十三岁登基，从登基那一年就开始给自己修陵墓。一个少年帝王，用一生时间，给自己挖了一座城。",
+      "rate": "-3%",
+      "pitch": "-2Hz",
+      "pace": "slow",
+      "zoom": "up",
+      "image_path": "assets/ai/qsh_06.png"
+    },
+    {
+      "id": 7,
+      "narration": "如今兵马俑每年接待超过一千万游客。但每一个到过现场的人都会告诉你——站在一号坑前面往下看的时候，那种震撼是无法用语言描述的。八千个陶俑，两千两百年。它们就站在那里，面朝东方，等着他们的皇帝回来。",
+      "rate": "-5%",
+      "pitch": "-2Hz",
+      "pace": "slow",
+      "zoom": "out",
+      "image_path": "assets/ai/qsh_07.png"
+    }
+  ]
+}

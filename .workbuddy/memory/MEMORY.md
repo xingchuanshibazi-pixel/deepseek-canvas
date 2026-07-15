@@ -42,7 +42,7 @@ AI 科普短视频自动生产线。输入 AI 图片 + JSON 脚本 → 输出小
 | 马里亚纳海沟 出图+出片 | ✅ 完成 | WorkBuddy | 8张图+60MB视频已完成 |
 | 管线 P0~P3 四级升级 | ✅ 完成 | Claude Code | v3.0→v3.3 |
 | 修复 v3.3 重复 clip bug | ✅ 完成 | Claude Code | 每个场景被加了两次，已修复 |
-| **太阳的声音 写脚本+出图** | 🟡 进行中 | Claude Code | 内容计划已有文案，写脚本+生成素材 |
+| **太阳的声音 → 秦始皇陵** | ✅ 完成 | Claude Code | 已替换为历史选题，7场景脚本+7张国漫图片 |
 | **用 v3.3 重跑巨齿鲨+创生之柱** | 🟡 进行中 | WorkBuddy | 管线升级后需重出片（含 BGM/CTA/音效） |
 | **用 v3.3 生成封面（4个选题）** | 🟡 进行中 | WorkBuddy | `python tools/cover_maker.py scripts/xxx.json` |
 | LLM 自动写 JSON 脚本（v4） | ⬜ 待领 | — | |
@@ -93,8 +93,8 @@ AI 科普短视频自动生产线。输入 AI 图片 + JSON 脚本 → 输出小
 
 **Claude Code 做：**
 - 修复 v3.3 重复 clip bug（每个场景被加了两次）
-- 写 `scripts/太阳的声音_v1.json`
-- 生成声音可视化图片（abstract 模式）
+- ~~写 `scripts/太阳的声音_v1.json`~~ → 改为历史选题 `scripts/秦始皇陵_v1.json`（7场景，国漫风，7张SD图）
+- 生成声音可视化图片（abstract 模式）→ 保留 sunsound 素材备用
 
 **WorkBuddy 做：**
 - 用 v3.3 重跑巨齿鲨 + 创生之柱（让老选题用上 BGM/音效/CTA）
