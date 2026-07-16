@@ -9,22 +9,13 @@ import requests
 from pathlib import Path
 from PIL import Image
 
-# 项目根
-PROJECT_ROOT = Path(__file__).parent.parent.resolve()
-BASE_DIR = PROJECT_ROOT / "assets"
+BASE_DIR = Path("F:/claude/deepseek/1/assets")
 W, H = 1080, 1920  # 小红书/抖音竖屏
+PROXY = {"http": "http://127.0.0.1:7890", "https": "http://127.0.0.1:7890"}
 
-# 代理设置（从环境变量读取）
-PROXY_URL = os.environ.get("HTTP_PROXY") or os.environ.get("HTTPS_PROXY")
-PROXY = {"http": PROXY_URL, "https": PROXY_URL} if PROXY_URL else None
-
-# Wallpaper Lab 路径（通过环境变量配置，仅 AI 生成时需要）
-WALLPAPER_LAB = Path(os.environ.get("WALLPAPER_LAB", "F:/claude/wallpaper-lab"))
-
-# 全局 session
+# 全局 session 走代理
 _session = requests.Session()
-if PROXY:
-    _session.proxies.update(PROXY)
+_session.proxies.update(PROXY)
 _session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) DeepSpaceCanvas/1.0"})
 
 
@@ -85,10 +76,10 @@ def generate_ai(prompt, style="concept", output_name=None, portrait=True):
     ori = "--orientation portrait" if portrait else ""
 
     cmd = (
-        f'cd "{WALLPAPER_LAB}" && '
+        f'cd F:/claude/wallpaper-lab && '
         f'python wallpaper.py sd '
         f'-p "{prompt}" -s {style} -r 1080p {ori} '
-        f'--output "{output_path}"'
+        f'--output {output_path}'
     )
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=120)
     if result.returncode == 0 and output_path.exists():
@@ -173,8 +164,7 @@ def download_via_cdp(url, output_name, target=None):
     """通过 CDP 浏览器下载图片（利用用户浏览器的网络环境）"""
     import subprocess
 
-    import tempfile
-    target = target or str(Path(tempfile.gettempdir()) / "cdp_images")
+    target = target or "F:/tmp/cdp_images"
     os.makedirs(target, exist_ok=True)
     fpath = f"{target}/{output_name}"
 

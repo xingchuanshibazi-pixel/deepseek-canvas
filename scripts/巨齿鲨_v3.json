@@ -2,19 +2,13 @@
   "title": "地球上存在过的最大的掠食者",
   "voice": "zh-CN-YunxiNeural",
   "output": "深空画布_巨齿鲨_v3_fixed.mp4",
-  "hook": "比公交车还长的鲨鱼\n真的存在过",
-  "bgm": "auto",
-  "bgm_mood": "deep",
-  "bgm_volume": 0.15,
-  "outro_narration": "你觉得巨齿鲨还有可能活着吗？如果它活到了现在，你还敢去海边吗？评论区告诉我你的答案。下一期，我们讲一种比巨齿鲨更神秘的生物——阿根廷巨鹰。关注我，别错过。",
   "scenes": [
     {
       "id": 1,
       "narration": "想象一下。你正在海边游泳，水面下有什么巨大的东西正在从深处升起。它比一辆公交车还长，比十头大象还重，一张嘴能吞下三个成年人。它不是电影里的怪物，它真的在地球上存在过。",
       "rate": "-5%",
       "pitch": "+0Hz",
-      "pace": "slow",
-      "image_path": "assets/ai/cmeg_01.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_01.png",
       "zoom": "in"
     },
     {
@@ -22,7 +16,7 @@
       "narration": "巨齿鲨。生活在2300万年前到360万年前的中新世海洋里。体长15到18米，体重超过50吨。作为对比，今天海洋里最大的掠食者大白鲨，体长只有4到6米。",
       "rate": "+0%",
       "pitch": "+3Hz",
-      "image_path": "assets/ai/cmeg_02.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_02.png",
       "zoom": "right"
     },
     {
@@ -30,7 +24,7 @@
       "narration": "一颗巨齿鲨的牙齿有17厘米长。17厘米，比你的整只手还长。人类发现的巨齿鲨化石中，最多的就是这种巨大的牙齿。因为鲨鱼的骨骼是软骨，很难变成化石，所以我们至今没有找到完整的巨齿鲨骨架。我们对它的全部认知，几乎都来自这一颗颗比手掌还大的牙齿。",
       "rate": "+3%",
       "pitch": "+2Hz",
-      "image_path": "assets/ai/cmeg_03.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_03.png",
       "zoom": "out"
     },
     {
@@ -38,7 +32,7 @@
       "narration": "巨齿鲨咬一口有多大的力量？科学家推算它的咬合力在10到18吨之间。霸王龙的咬合力大约是6吨，现代咸水鳄的咬合力不到2吨。巨齿鲨可以在几秒钟内粉碎一辆小汽车的骨架。它是地球历史上咬合力最强的生物，没有之一。",
       "rate": "+3%",
       "pitch": "+8Hz",
-      "image_path": "assets/ai/cmeg_04.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_04.png",
       "zoom": "left"
     },
     {
@@ -46,7 +40,7 @@
       "narration": "以这样的体型和咬合力，巨齿鲨吃什么？答案是鲸鱼。在中新世的海洋里，巨齿鲨以小型鲸类为食。化石记录中发现了大量鲸鱼骨骼上的巨齿鲨咬痕。巨齿鲨会从下方攻击，瞄准鲸鱼的腹腔部位，一击致命。",
       "rate": "+0%",
       "pitch": "+5Hz",
-      "image_path": "assets/ai/cmeg_05.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_05.png",
       "zoom": "up"
     },
     {
@@ -54,7 +48,7 @@
       "narration": "但这么强大的掠食者，为什么灭绝了？大约360万年前，地球进入了上新世末期的全球变冷。海平面下降，浅海栖息地大量消失。巨齿鲨依赖的温暖浅海和鲸鱼种群都减少了。同时，更小更灵活的大白鲨出现，在和巨齿鲨的竞争中胜出。",
       "rate": "-3%",
       "pitch": "-3Hz",
-      "image_path": "assets/ai/cmeg_06.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_06.png",
       "zoom": "in"
     },
     {
@@ -62,7 +56,7 @@
       "narration": "有一种说法认为，巨齿鲨还活着，藏在人类尚未探索的深海。但科学告诉我们：不太可能。一个体长18米、需要以鲸鱼为食的顶级掠食者，不可能在人类完全没有观测到的情况下存活几百万年。",
       "rate": "+0%",
       "pitch": "+0Hz",
-      "image_path": "assets/ai/cmeg_07.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_07.png",
       "zoom": "left"
     },
     {
@@ -70,8 +64,7 @@
       "narration": "巨齿鲨在地球上统治了将近两千万年。我们人类这个物种，从出现到现在不过30万年。它的牙齿沉在海底，它的故事写在化石里。这是一头曾经真实存在的巨兽，不是神话，不是电影，是地球自己的历史。",
       "rate": "-8%",
       "pitch": "-2Hz",
-      "pace": "slow",
-      "image_path": "assets/ai/cmeg_08.png",
+      "image_path": "F:/claude/deepseek/1/assets/ai/cmeg_08.png",
       "zoom": "out"
     }
   ]
