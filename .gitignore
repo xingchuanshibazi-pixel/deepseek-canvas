@@ -1,5 +1,6 @@
-# 视频输出（体积大，每次运行都会重新生成）
+# 产物（体积大，可重新生成）
 output/
+assets/ai/
 
 # Python
 __pycache__/
